@@ -6,59 +6,56 @@ function getParameterByName(name) {
 }
 
 function createThread()
-{
-   
-        var title = $("#threadTitle").val();
-        var date = $("#date").val();
-        var question = $("#question").val();
-        var classid = sessionStorage.getItem('courseID');
-        //var username=getCookie("username");
+{   
+    var title = $("#threadTitle").val();
+    var date = $("#date").val();
+    var question = $("#question").val();
+    var classid = sessionStorage.getItem('courseID');
+    //var username=getCookie("username");
         
-        $.ajax({
-            type: "POST",
-            url: "../Actions/executeThread.php",
-            data: "title=" + title + "&date=" + date + "&question=" + question + "&classid=" + classid,
-            cache: false,
-            success: function (data) {
-                if (data == 'true') {
-                    window.location = "studentHome.php";
-                }
-                else {
-                    alert('Not enough information');
-                }
+    $.ajax({
+        type: "POST",
+        url: "/Actions/executeThread.php",
+        data: "title=" + title + "&date=" + date + "&question=" + question + "&classid=" + classid,
+        cache: false,
+        success: function (data) {
+            if (data == 'true') {
+                window.location = "/home/student-home";
             }
-        });
+            else {
+                alert('Not enough information');
+            }
+        }
+    });
 
-        return false;
-   
+    return false;
+
 }
 
 function createThreadIn()
 {
-   
-        var title = $("#threadTitle").val();
-        var date = $("#date").val();
-        var question = $("#question").val();
-        var classid = sessionStorage.getItem('courseID');
-        //var username=getCookie("username");
+    var title = $("#threadTitle").val();
+    var date = $("#date").val();
+    var question = $("#question").val();
+    var classid = sessionStorage.getItem('courseID');
+    //var username=getCookie("username");
         
-        $.ajax({
-            type: "POST",
-            url: "../Actions/executeThread.php",
-            data: "title=" + title + "&date=" + date + "&question=" + question + "&classid=" + classid,
-            cache: false,
-            success: function (data) {
-                if (data == 'true') {
-                    window.location = "instructorHome.php";
-                }
-                else {
-                    alert('Not enough information');
-                }
+    $.ajax({
+        type: "POST",
+        url: "/Actions/executeThread.php",
+        data: "title=" + title + "&date=" + date + "&question=" + question + "&classid=" + classid,
+        cache: false,
+        success: function (data) {
+            if (data == 'true') {
+                window.location = "/home/instructor-home";
+            } else {
+                alert('Not enough information');
             }
-        });
+        }
+    });
 
-        return false;
-   
+    return false;
+
 }
 
 // for students to get the comments
@@ -68,7 +65,7 @@ function getHwComment()
     var classid = sessionStorage.getItem('courseID');
     $.ajax({
         type: "POST",
-        url: "../Actions/getHwCommentStudent.php",
+        url: "/Actions/getHwCommentStudent.php",
         data: "hwid=" + hwid + "&classid=" + classid,
         cache: false,
         success: function (data) {
@@ -101,14 +98,14 @@ function hwCommentAdd()
     var username = getParameterByName("username");
     $.ajax({
         type: "POST",
-        url: "../Actions/getHwCommentInstructor.php",
+        url: "/Actions/getHwCommentInstructor.php",
         data: "hwid=" + hwid + "&classid=" + classid + "&username=" + username,
         cache: false,
         success: function (data) {
             if (data == false)
             {
                 var html = "<h1>No Comments</h1><br>";
-                html += "<a href=\"hwCommentList.php?hwid=" + hwid + "\" data-ajax=\"false\">Go back to Student List?</a>"
+                html += "<a href=\"/Responders/hwCommentList.php?hwid=" + hwid + "\" data-ajax=\"false\">Go back to Student List?</a>"
                 document.getElementById("demo").innerHTML = html;
                 alert("No Comment");
             }
@@ -122,7 +119,7 @@ function hwCommentAdd()
 
                     html += "&nbsp;&nbsp;&nbsp;&nbsp;" + num + ".&nbsp;" + comment + "<br>";
                 }
-                html += "<a href=\"hwCommentList.php?hwid=" + hwid + "\" data-ajax=\"false\">Go back to Student List?</a>"
+                html += "<a href=\"/Responders/hwCommentList.php?hwid=" + hwid + "\" data-ajax=\"false\">Go back to Student List?</a>"
                 document.getElementById("demo").innerHTML = html;
             }
         }
@@ -145,7 +142,7 @@ function createHwComment()
     {
         $.ajax({
             type: "POST",
-            url: "../Actions/addHwComment.php",
+            url: "/Actions/addHwComment.php",
             data: "comment=" + comment + "&hwid=" + hwid + "&classid=" + classid + "&username=" + username,
             cache: false,
             success: function (data) {
@@ -171,7 +168,7 @@ function hwCommentList()
     var classid = sessionStorage.getItem('courseID');
     $.ajax({
         type: "POST",
-        url: "../Actions/getStudentCommentList.php",
+        url: "/Actions/getStudentCommentList.php",
         data: "classid=" + classid + "&hwid=" + hwid,
         cache: false,
         async: false,
@@ -186,7 +183,7 @@ function hwCommentList()
                 for (var i = 0; i < data.length; i++)
                 {
                     var username = data[i].username;
-                    html += "<a href=\"hwCommentAdd.php?hwid=" + hwid + "&username=" + username + "\" class=\"ui-btn ui-btn-a ui-corner-all\" data-ajax=\"false\">" + username + "</a><br>";
+                    html += "<a href=\"/Responders/hwCommentAdd.php?hwid=" + hwid + "&username=" + username + "\" class=\"ui-btn ui-btn-a ui-corner-all\" data-ajax=\"false\">" + username + "</a><br>";
                 }
                 document.getElementById("demo").innerHTML = html;
 
@@ -200,7 +197,7 @@ function messageBoardDisplay()
     var classid = sessionStorage.getItem('courseID');
     $.ajax({
         type: "POST",
-        url: "../Actions/getMessage.php",
+        url: "/Actions/getMessage.php",
         data: "classid=" + classid,
         cache: false,
         async: false,
@@ -219,7 +216,8 @@ function messageBoardDisplay()
                     var username=data[i].userID;
                     var date=data[i].date;
                     
-                    html += "<a href=\"commentPage.php?question=" + question + "&questionid=" + questionid + "\" class=\"ui-btn ui-btn-a ui-corner-all\" data-ajax=\"false\"> Question:" + question +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By:"+username+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date:"+date +"</a><br>";
+                    html += "<a href=\"/Responders/commentPage.php?question=" + question + "&questionid=" + questionid + "\" class=\"ui-btn ui-btn-a ui-corner-all\" data-ajax=\"false\"> Question:" + question +"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;By:"+username+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Date:"+date +"</a><br>";
+
                 }
                 document.getElementById("demo").innerHTML = html;
 
@@ -235,7 +233,7 @@ function commentPage()
     var classid = sessionStorage.getItem('courseID');
     $.ajax({
         type: "POST",
-        url: "../Actions/getComment.php",
+        url: "/Actions/getComment.php",
         data: "question=" + question + "&questionid=" + questionid + "&classid=" + classid,
         cache: false,
         success: function (data) {
@@ -252,7 +250,7 @@ function commentPage()
                     var comment = data[i].comment;
                     var userID = data[i].userID;
 
-                    html += comment + "&nbsp;&nbsp;&nbsp;&nbsp; Commented By: "+userID+"<br>";
+                    html += comment + "&nbsp;&nbsp;&nbsp;&nbsp; Commented By: " + userID + "<br>";
                 }
                 document.getElementById("demo").innerHTML = html;
             }
@@ -266,28 +264,211 @@ function commentPageButton()
     var questionid = getParameterByName("questionid");
     var comment = $("#comment").val();
     var classid = sessionStorage.getItem('courseID');
-    if(comment=="")
+    if (comment == "")
     {
-     alert("Not Enough Information");   
+        alert("Not Enough Information");
     }
     else
     {
-    $.ajax({
+        $.ajax({
+            type: "POST",
+            url: "/Actions/executeCommenting.php",
+            data: "comment=" + comment + "&question=" + question + "&questionid=" + questionid + "&classid=" + classid,
+            cache: false,
+            success: function (data) {
+                if (data == 'true') {
+                    alert("Message added");
+                    window.location.reload();
+                }
+                else {
+                    alert("Invalid message");
+                }
+            }
+        });
+        return false;
+    }
+
+}
+function submitModuleAdd()
+{
+    var classID = sessionStorage.getItem('courseID');
+    var title = $('#title').val();
+    var moduleNumber = $('#moduleNumber').val();
+    if (isNaN(moduleNumber))
+    {
+        alert("ID Must be a Number");
+    }
+    else
+    {
+        $.ajax({
+            type: "POST",
+            url: "/Actions/executeModuleAdd.php",
+            data: "classID=" + classID + "&moduleNumber=" + moduleNumber + "&title=" + title,
+            cache: false,
+            success: function (data) {
+                if (data == true)
+                {
+                    alert("Module Created");
+                    window.location = '/home/instructor-home/create-and-view-modules';
+                }
+                else
+                {
+                    alert("Module Already Created");
+                }
+            }
+        });
+    }
+}
+
+function displayModule1()
+{
+    var classid = sessionStorage.getItem('courseID');
+    return $.ajax({
         type: "POST",
-        url: "../Actions/executeCommenting.php",
-        data: "comment=" + comment + "&question=" + question + "&questionid=" + questionid + "&classid=" + classid ,
+        url: "/Actions/getModule.php",
+        data: "classid=" + classid,
         cache: false,
         success: function (data) {
-            if (data == 'true') {
-                alert("Message added");
-                window.location.reload();
+            if (data == false)
+            {
+                alert("No Module");
             }
-            else {
-                alert("Invalid message");
+            else
+            {
+                var html = "";
+                for (var i = 0; i < data.length; i++)
+                {
+                    //var classid = data[i].classID;
+                    var moduleid = data[i].moduleID;
+                    var title = data[i].title;
+                    var lock = data[i].lock;
+                    if (lock == '1')
+                    {
+
+                    }
+                    else
+                    {
+                        html += "<a onclick='goToStudentModule(" + moduleid + ")' class=\"ui-btn ui-btn-a ui-corner-all\" data-ajax=\"false\"> Module " + moduleid + ": " + title + "</a><br>";
+                    }
+                }
+                document.getElementById("demo").innerHTML = html;
+
             }
         }
     });
-    return false;
+}
+
+function goToStudentModule(moduleid) {
+    sessionStorage.setItem('moduleid', moduleid);
+    window.location = '/home/student-home/modules/view';
+}
+
+function displayModule2()
+{
+    var classid = sessionStorage.getItem('courseID');
+    return $.ajax({
+        type: "POST",
+        url: "/Actions/getModule.php",
+        data: "classid=" + classid,
+        cache: false,
+        success: function (data) {
+            if (data == false)
+            {
+                alert("Create Module First");
+                var html = "";
+                html += "<a href='/home/instructor-home/create-and-view-modules/create-module'>Create Module</a>";
+                document.getElementById("demo").innerHTML = html;
+            }
+            else
+            {
+                var html = "";
+                for (var i = 0; i < data.length; i++)
+                {
+                    //var classid = data[i].classID;
+                    var moduleid = data[i].moduleID;
+                    var title = data[i].title;
+                    var lock = data[i].lock;
+                    if (lock == '1')
+                    {
+
+                    }
+                    else
+                    {
+                        html += "<a onclick='goToInstructorModule(" + moduleid + ")' class=\"ui-btn ui-btn-a ui-corner-all\" data-ajax=\"false\"> Module " + moduleid + ": " + title + "</a><br>";
+                    }
+                }
+                html += "<br><a href='/home/instructor-home/create-and-view-modules/create-module'>Create Module</a>";
+                document.getElementById("demo").innerHTML = html;
+
+            }
+        }
+    });
+}
+
+function goToInstructorModule(moduleid) {
+    sessionStorage.setItem('moduleid', moduleid);
+    window.location = '/home/instructor-home/create-and-view-modules/modify-module';
+}
+
+function moduleDescription()
+{
+    var moduleid = sessionStorage.getItem("moduleid");
+    var classid = sessionStorage.getItem('courseID');
+    $.ajax({
+        type: "POST",
+        url: "/Actions/getModuleDescription.php",
+        data: "moduleid=" + moduleid + "&classid=" + classid,
+        cache: false,
+        success: function (data) {
+            if (data == false)
+            {
+                document.getElementById("demo").innerHTML = "<h1> Module: " + moduleid + "</h1>";
+                alert("No Description");
+            }
+            else
+            {
+                var title=data[0].title;
+                var html = "<h1> Module " + moduleid +": "+title+ "</h1><br>";
+                for (var i = 0; i < data.length; i++)
+                {
+                    var description = data[i].description;
+                    
+
+                    html += description + "<br>";
+                }
+                document.getElementById("demo").innerHTML = html;
+            }
+        }
+    });
+}
+
+function modulePageButton()
+{
+    var moduleid = sessionStorage.getItem('moduleid');
+    var description = $("#description").val();
+    var classid = sessionStorage.getItem('courseID');
+    if (description == "")
+    {
+        alert("Not Enough Information");
+    }
+    else
+    {
+        $.ajax({
+            type: "POST",
+            url: "/Actions/executeModuleDescription.php",
+            data: "description=" + description + "&moduleid=" + moduleid + "&classid=" + classid,
+            cache: false,
+            success: function (data) {
+                if (data == 'true') {
+                    alert("Description added");
+                    window.location.reload();
+                }
+                else {
+                    alert("Invalid description");
+                }
+            }
+        });
+        return false;
     }
 
 }
